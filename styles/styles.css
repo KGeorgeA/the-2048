@@ -1,1 +1,83 @@
+body {
+    font-family: "Clear sans", "Helvetica Neue", Arial, sans-serif;
+    background: #faf8ef;
+    color: #776e65;
+}
 
+.wrapper {
+    max-width: 500px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.header {
+    position: relative;
+    padding: 30px 0;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.title {
+    position: absolute;
+    /* top: 0; */
+    left: 0;
+
+    font-size: 80px;
+    font-weight: bold;
+}
+
+.score-container {
+    display: flex;
+}
+
+.score-container__main::before {
+    content: "Score";
+}
+
+.score-container__best::after {
+    content: "Best Score";
+}
+
+.rungame-container {
+    width: 150px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #8f7a66;
+    border-radius: 3px;
+    color: #f9f6f2;
+}
+
+.game-field {
+    box-sizing: border-box;
+    width: 500px;
+    height: 500px;
+    padding: 15px;
+    margin-top: 40px;
+    border-radius: 6px;
+
+    background: #bbada0;
+}
+
+.grid-row {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    margin-bottom: 15px;
+}
+    .grid-row:last-child {
+        margin-bottom: 0;
+    }
+
+.grid-cell {
+    width: 106.25px;
+    height: 106.25px;
+    border-radius: 3px;
+    margin-right: 15px;
+    background: rgba(238, 228, 218, 0.35);
+}
+    .grid-cell:last-child {
+        margin-right: 0;
+    }
