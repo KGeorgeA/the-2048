@@ -25,6 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let scoresArr = [];
     let score = 0;
     let tilesNumArr = [];
+    let canRemember = true;
 
     class Game {
         constructor (event) {
@@ -32,6 +33,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         startGame () {
+            canRemember = false;
+
             gameMessage.className = "game-message_display-none";
             gameMessage.innerHTML = "";
             document.addEventListener("keydown", move);
@@ -65,6 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         render () {
+            canRemember = true;
             tilesElements.forEach((item) => {
                 if (Number(item.textContent) === 0) item.textContent = "";
                 this.changeTileClass(item, item.textContent);
@@ -81,6 +85,12 @@ document.addEventListener("DOMContentLoaded", () => {
         rememberStepAndScore () {
             scoresArr.push(score);
             stepsArr.push(tilesNumArr.slice());
+            let count = 0;
+            tilesNumArr.map(item => {if (item !== 0) count++})
+            if (count >= 2 && canRemember) {
+                localStorage.setItem("score", score);
+                localStorage.setItem("lastStepArr", stepsArr[stepsArr.length - 1]);
+            }
         }
 
         stepBack () {
@@ -96,6 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 score = scoresArr[scoresArr.length - 2];
                 
                 this.render();
+                
                 scoresArr.pop();
                 stepsArr.pop();
             }
@@ -286,20 +297,36 @@ document.addEventListener("DOMContentLoaded", () => {
             score += sumResult;
             scoreDisplay.textContent = score;
 
-            if (localStorage.bestScore < score) {
+            if (localStorage.bestScore < score || !localStorage.bestScore) {
                 bestScoreDisplay.textContent = score;
                 localStorage.setItem("bestScore", score);
             }
-
             this.gameWin();
         }        
     }
 
-    function start() { // если в локал сторадж есть "степс" тогда 
+    function start() {
+        localStorage.setItem("score", 0);
+        localStorage.setItem("lastStepArr",0);
+        stepsArr = [];
         let start = new Game();
         start.startGame();
     }
-    start();
+
+    if (localStorage.score > 0){
+        score = Number(localStorage.score);
+        let lastArr = localStorage.lastStepArr.split(",");
+        scoreDisplay.textContent = score;
+        console.log(lastArr);
+        tilesElements.forEach((item, index) => {
+            item.textContent = tilesNumArr[index] = Number(lastArr[index]);
+        });
+
+        let render = new Game();
+        render.render();
+    } else {
+        start();
+    }
     newGameBtn.addEventListener("click", start);
     
     function move(event) {
